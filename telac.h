@@ -7,10 +7,12 @@ void desativar_alt();
 #define INICIAR_TELA(titulo)                                                   \
   int rows = 0, cols = 0;                                                      \
   int rows_ant = 0, cols_ant = 0;                                              \
+  char tecla = 0;                                                              \
   init_terminal();                                                             \
   definir_titulo(titulo);                                                      \
   while (1) {                                                                  \
-    if (ler_tecla() == 'q')                                                    \
+    tecla = ler_tecla();                                                       \
+    if (tecla == 'q')                                                          \
       break;                                                                   \
     tamanho_terminal(&rows, &cols);                                            \
     if (rows != rows_ant || cols != cols_ant) {                                \
