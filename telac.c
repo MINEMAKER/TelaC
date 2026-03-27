@@ -44,6 +44,8 @@ void clear() { printf("\033[2J\033[H"); }
 
 void gotoxy(int x, int y) { printf("\033[%d;%dH", y, x); }
 
+void definir_titulo(const char *titulo) { printf("\033]0;%s\007", titulo); }
+
 // ---------- CORES ----------
 void texto_cor(Cor cor) { printf("\033[%dm", cor); }
 
@@ -60,11 +62,10 @@ void print_cor(Cor cor, const char *formato, ...) {
 
   va_list args;
   va_start(args, formato);
-  vprintf(formato, args); // vprintf é como printf, mas recebe uma va_list
-                          // (argumentos variáveis)
+  vprintf(formato, args);
   va_end(args);
 
-  texto_cor(PADRAO); // Reseta a cor de volta ao padrão depois de printar
+  texto_cor(PADRAO);
 }
 
 // ---------- TERMINAL SIZE ----------
@@ -83,7 +84,7 @@ char ler_tecla() {
   return 0;
 }
 
-// ---------- RENDER ----------
+// ---------- DESENHAR ----------
 void desenhar_borda(int rows, int cols) {
   for (int y = 1; y <= rows; y++) {
     printf("\033[%d;1H", y);
