@@ -50,6 +50,7 @@ void definir_titulo(const char *titulo);
 
 void tamanho_terminal(int *rows, int *cols);
 void desenhar_borda(int rows, int cols);
+void desenhar_borda_xy(int x_inicial, int y_inicial, int x_final, int y_final);
 
 void init_terminal();
 void restore_terminal();
