@@ -22,12 +22,12 @@ void init_terminal() {
   setbuf(stdout, NULL);
 
   ativar_alt();
-  hide_cursor();
+  esconder_cursor();
 }
 
 void restore_terminal() {
   tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-  show_cursor();
+  mostrar_cursor();
   desativar_alt();
 }
 
@@ -36,11 +36,11 @@ void ativar_alt() { printf("\033[?1049h"); }
 
 void desativar_alt() { printf("\033[?1049l"); }
 
-void hide_cursor() { printf("\033[?25l"); }
+void esconder_cursor() { printf("\033[?25l"); }
 
-void show_cursor() { printf("\033[?25h"); }
+void mostrar_cursor() { printf("\033[?25h"); }
 
-void clear() { printf("\033[2J\033[H"); }
+void limpar() { printf("\033[2J\033[H"); }
 
 void gotoxy(int x, int y) { printf("\033[%d;%dH", y, x); }
 
