@@ -16,7 +16,7 @@ void desativar_alt();
       break;                                                                   \
     tamanho_terminal(&rows, &cols);                                            \
     if (rows != rows_ant || cols != cols_ant) {                                \
-      clear();                                                                 \
+      limpar();                                                                 \
       desenhar_borda(rows, cols);                                              \
       rows_ant = rows;                                                         \
       cols_ant = cols;                                                         \
@@ -43,10 +43,10 @@ void texto_cor(Cor cor);
 void fundo_cor(Cor cor);
 void print_cor(Cor cor, const char *formato, ...);
 
-void hide_cursor();
-void show_cursor();
+void esconder_cursor();
+void mostrar_cursor();
 
-void clear();
+void limpar();
 void gotoxy(int x, int y);
 void definir_titulo(const char *titulo);
 
