@@ -97,3 +97,20 @@ void desenhar_borda(int rows, int cols) {
     }
   }
 }
+
+void desenhar_borda_xy(int x_inicial, int y_inicial, int x_final, int y_final) {
+  for (int y = y_inicial; y <= y_final; y++) {
+    printf("\033[%d;%dH", y, x_inicial);
+
+    for (int x = x_inicial; x <= x_final; x++) {
+      if ((y == y_inicial || y == y_final) && (x == x_inicial || x == x_final))
+        printf("+");
+      else if (y == y_inicial || y == y_final)
+        printf("-");
+      else if (x == x_inicial || x == x_final)
+        printf("|");
+      else
+        printf(" ");
+    }
+  }
+}
