@@ -8,6 +8,12 @@
 
 static struct termios oldt;
 
+int rows = 0;
+int cols = 0;
+char tecla = 0;
+int tela = 0;
+int hover_menu = 0;
+
 // ---------- TERMINAL ----------
 void init_terminal() {
   struct termios newt;
@@ -40,7 +46,10 @@ void esconder_cursor() { printf("\033[?25l"); }
 
 void mostrar_cursor() { printf("\033[?25h"); }
 
-void limpar() { printf("\033[2J\033[H"); }
+void limpar() {
+  printf("\033[2J\033[H");
+  desenhar_borda(rows, cols);
+}
 
 void gotoxy(int x, int y) { printf("\033[%d;%dH", y, x); }
 
@@ -100,17 +109,61 @@ void desenhar_borda(int rows, int cols) {
 
 void desenhar_borda_xy(int x_inicial, int y_inicial, int x_final, int y_final) {
   for (int y = y_inicial; y <= y_final; y++) {
-    printf("\033[%d;%dH", y, x_inicial);
-
     for (int x = x_inicial; x <= x_final; x++) {
-      if ((y == y_inicial || y == y_final) && (x == x_inicial || x == x_final))
-        printf("+");
-      else if (y == y_inicial || y == y_final)
-        printf("-");
-      else if (x == x_inicial || x == x_final)
-        printf("|");
-      else
-        printf(" ");
+
+      if (y == y_inicial || y == y_final || x == x_inicial || x == x_final) {
+        gotoxy(x, y);
+
+        if ((y == y_inicial || y == y_final) &&
+            (x == x_inicial || x == x_final))
+          printf("+");
+        else if (y == y_inicial || y == y_final)
+          printf("-");
+        else
+          printf("|");
+      }
     }
+  }
+}
+
+void criar_menu(int qtd_opcoes, ...) {
+  if (tela != 0)
+    return;
+
+  if (tecla == 'w' || tecla == 'W') {
+    if (hover_menu > 0)
+      hover_menu--;
+  }
+  if (tecla == 's' || tecla == 'S') {
+    if (hover_menu < qtd_opcoes - 1)
+      hover_menu++;
+  }
+
+  int inicio_y = (rows / 2) - (qtd_opcoes / 2);
+  int inicio_x = (cols / 2) - 10;
+
+  va_list args;
+  va_start(args, qtd_opcoes);
+
+  for (int i = 0; i < qtd_opcoes; i++) {
+    const char *opcao = va_arg(args, const char *);
+    gotoxy(inicio_x, inicio_y + i);
+    if (i == hover_menu)
+      print_cor(VERDE, "-> %s", opcao);
+    else
+      printf("   %s", opcao);
+  }
+  va_end(args);
+
+  if (tecla == '\n' || tecla == ' ') {
+    tela = hover_menu + 1;
+    limpar();
+  }
+}
+
+void voltar_menu(char tecla_desejada) {
+  if (tecla == tecla_desejada) {
+    tela = 0;
+    limpar();
   }
 }
