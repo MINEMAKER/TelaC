@@ -2,20 +2,25 @@
 #define TELAC_H
 #include <unistd.h>
 
+extern int rows;
+extern int cols;
+extern char tecla;
+extern int tela;
+extern int hover_menu;
+
 void ativar_alt();
 void desativar_alt();
 #define INICIAR_TELA(titulo)                                                   \
-  int rows = 0, cols = 0;                                                      \
   int rows_ant = 0, cols_ant = 0;                                              \
   init_terminal();                                                             \
   definir_titulo(titulo);                                                      \
   while (1) {                                                                  \
-    if (ler_tecla() == 'q')                                                    \
+    tecla = ler_tecla();                                                       \
+    if (tecla == 'q')                                                          \
       break;                                                                   \
     tamanho_terminal(&rows, &cols);                                            \
     if (rows != rows_ant || cols != cols_ant) {                                \
-      limpar();                                                                 \
-      desenhar_borda(rows, cols);                                              \
+      limpar();                                                                \
       rows_ant = rows;                                                         \
       cols_ant = cols;                                                         \
     }
@@ -56,5 +61,8 @@ void init_terminal();
 void restore_terminal();
 
 char ler_tecla();
+
+void criar_menu(int qtd_opcoes, ...);
+void voltar_menu(char tecla_desejada);
 
 #endif
