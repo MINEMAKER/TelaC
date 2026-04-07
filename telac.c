@@ -15,6 +15,16 @@ int tecla = 0;
 int tela = 0;
 int hover_menu = 0;
 
+int _menu_clicado_id = -1;
+int _menu_clicado_opcao = -1;
+int _menu_processado_frame = 0;
+
+int _botao_hover = 1;
+int _botao_count = 0;
+int _botao_count_max = 0;
+int _botao_clicado = 0;
+int _botao_processado_frame = 0;
+
 // ---------- TERMINAL ----------
 void init_terminal() {
   struct termios newt;
@@ -161,6 +171,9 @@ void criar_menu(int qtd_opcoes, ...) {
   if (tela != 0)
     return;
 
+  // Trava de seguranca para menus de tamanhos diferentes
+  if (hover_menu >= qtd_opcoes) hover_menu = qtd_opcoes - 1;
+
   if (tecla == 'w' || tecla == 'W' || tecla == TECLA_CIMA) {
     if (hover_menu > 0)
       hover_menu--;
@@ -188,6 +201,8 @@ void criar_menu(int qtd_opcoes, ...) {
 
   if (tecla == TECLA_ENTER || tecla == ' ') {
     tela = hover_menu + 1;
+    tecla = 0; // Consome a tecla!
+    hover_menu = 0; // Volta a setinha pro topo da proxima tela
     limpar();
   }
 }
@@ -195,6 +210,100 @@ void criar_menu(int qtd_opcoes, ...) {
 void voltar_menu(int tecla_desejada) {
   if (tecla == tecla_desejada) {
     tela = 0;
+    tecla = 0; // Consome a tecla!
+    hover_menu = 0; // Zera a selecao do menu principal
     limpar();
+  }
+}
+
+// ---------- OPCAO B: MENU GENERICO ----------
+void criar_menu_xy(int id_menu, int inicio_x, int inicio_y, int qtd_opcoes, ...) {
+  // Trava de seguranca
+  if (hover_menu >= qtd_opcoes) hover_menu = qtd_opcoes - 1;
+
+  if (!_menu_processado_frame) {
+    if (tecla == 'w' || tecla == 'W' || tecla == TECLA_CIMA) {
+      if (hover_menu > 0)
+        hover_menu--;
+    }
+    if (tecla == 's' || tecla == 'S' || tecla == TECLA_BAIXO) {
+      if (hover_menu < qtd_opcoes - 1)
+        hover_menu++;
+    }
+    _menu_processado_frame = id_menu; // Marca qual menu leu o teclado
+  }
+
+  va_list args;
+  va_start(args, qtd_opcoes);
+
+  for (int i = 0; i < qtd_opcoes; i++) {
+    const char *opcao = va_arg(args, const char *);
+    gotoxy(inicio_x, inicio_y + i);
+    
+    if (i == hover_menu && _menu_processado_frame == id_menu)
+      print_cor(VERDE, "-> %s", opcao);
+    else
+      printf("   %s", opcao);
+  }
+  va_end(args);
+
+  if ((tecla == TECLA_ENTER || tecla == ' ') && _menu_processado_frame == id_menu) {
+    _menu_clicado_id = id_menu;
+    _menu_clicado_opcao = hover_menu;
+    tecla = 0; // Consome a tecla!
+  }
+}
+
+int clicou_menu(int id_menu, int indice_opcao) {
+  if (_menu_clicado_id == id_menu && _menu_clicado_opcao == indice_opcao) {
+    return 1;
+  }
+  return 0;
+}
+
+// ---------- OPCAO C: BOTOES INDEPENDENTES ----------
+int criar_botao(int x, int y, const char *texto) {
+  _botao_count++;
+  int meu_id = _botao_count;
+  
+  if (!_botao_processado_frame) {
+    if (tecla == 'a' || tecla == 'A' || tecla == TECLA_ESQUERDA) {
+      if (_botao_hover > 1) _botao_hover--;
+    }
+    if (tecla == 'd' || tecla == 'D' || tecla == TECLA_DIREITA) {
+      if (_botao_hover < _botao_count_max) _botao_hover++;
+    }
+    _botao_processado_frame = 1;
+  }
+  
+  gotoxy(x, y);
+  if (_botao_hover == meu_id) {
+    print_cor(VERDE, "[ %s ]", texto);
+  } else {
+    printf("  %s  ", texto);
+  }
+  
+  if ((tecla == TECLA_ENTER || tecla == ' ') && _botao_hover == meu_id) {
+    _botao_clicado = meu_id;
+    tecla = 0; // Consome a tecla!
+  }
+  
+  if (_botao_clicado == meu_id) return 1;
+  return 0;
+}
+
+// ---------- CLEAR ----------
+void limpar_eventos() {
+  _menu_clicado_id = -1;
+  _menu_clicado_opcao = -1;
+  _menu_processado_frame = 0;
+  
+  _botao_count_max = _botao_count;
+  _botao_count = 0;
+  _botao_clicado = 0;
+  _botao_processado_frame = 0;
+  
+  if (_botao_hover > _botao_count_max && _botao_count_max > 0) {
+    _botao_hover = _botao_count_max;
   }
 }

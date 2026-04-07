@@ -36,6 +36,7 @@ void desativar_alt();
     }
 
 #define FINALIZAR_TELA                                                         \
+  limpar_eventos();                                                            \
   usleep(delay_ms);                                                            \
   }                                                                            \
   restore_terminal();
@@ -80,5 +81,10 @@ int ler_tecla();
 
 void criar_menu(int qtd_opcoes, ...);
 void voltar_menu(int tecla_desejada);
+
+void criar_menu_xy(int id_menu, int inicio_x, int inicio_y, int qtd_opcoes, ...);
+int clicou_menu(int id_menu, int indice_opcao);
+int criar_botao(int x, int y, const char *texto);
+void limpar_eventos();
 
 #endif
