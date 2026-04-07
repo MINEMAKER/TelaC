@@ -2,18 +2,16 @@
 #include <stdio.h>
 
 int main() {
-  INICIAR_TELA("Meu Aplicativo Profissional");
+  INICIAR_TELA("Tela com menu");
 
   // Menu = 0
   criar_menu(3, "Jogar", "Configuracoes", "Sair");
 
   // Tela 1: Jogo
   if (tela == 1) {
-    gotoxy(5, 5);
-    printf("O jogo estaria rodando agora!");
-    gotoxy(5, 7);
-    printf("Pressione 'v' para voltar ao menu principal.");
-
+    desenhar_borda(rows, cols);
+    gotoxy(5, rows);
+    printf(" Pressione 'v' para voltar ao menu principal ");
     voltar_menu('v');
   }
 
