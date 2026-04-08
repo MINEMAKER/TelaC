@@ -28,7 +28,7 @@ int main() {
       print_cor(AZUL, "Resumo Financeiro da Empresa");
       
       // Um botão imediato na posição x=5, y=7
-      if (criar_botao(5, 7, "Voltar ao Inicio")) {
+      BOTAO(5, 7, "Voltar ao Inicio")) {
           tela = 0; // Volta para o Menu Principal
           limpar();
       }
