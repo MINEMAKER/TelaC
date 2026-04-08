@@ -85,6 +85,10 @@ void voltar_menu(int tecla_desejada);
 void criar_menu_xy(int id_menu, int inicio_x, int inicio_y, int qtd_opcoes, ...);
 int clicou_menu(int id_menu, int indice_opcao);
 int criar_botao(int x, int y, const char *texto);
+
+#define AO_CLICAR_MENU(id_menu, indice_opcao) if (clicou_menu(id_menu, indice_opcao))
+#define BOTAO(x, y, texto) if (criar_botao(x, y, texto))
+
 void limpar_eventos();
 
 #endif
