@@ -1,8 +1,8 @@
 # Telac
 
-Uma biblioteca/framework leve para a criação de Interfaces em Modo Texto (TUI), menus complexos e aplicações no terminal rodando integralmente em **C**. 
+Uma biblioteca/framework para a criação de Interfaces em Modo Texto (TUI), menus complexos e aplicações no terminal rodando integralmente em **C**. 
 
-O **Telac** abstrai toda a complicação de manipular códigos ANSI, redimensionamento de terminais e interceptação de teclas, entregando para o desenvolvedor um motor baseado no paradigma *Immediate Mode GUI*.
+O **Telac** abstrai toda a complicação de manipular códigos ANSI e redimensionamento de terminais.
 
 ## Como Usar
 
